@@ -6,12 +6,12 @@ from CRUD import (read, create, delete, update, solicitar_pedido, ver_stock, reg
 from create_database import create_db
 
 #Comando para testear: pytest "test_archivo.py" 
-#Comando para evaluar la cobertura: coverage run -m pytest -v
+#Comando para evaluar la cobertura: coverage run -m pytest -v "test_main.py"
 #Comando para ver el informe de la cobertura: coverage report -m  
 #Comando para generar el informe de cobertura en html: coverage html 
 
 def test_create_db_example():
-    cnx = mysql.connector.connect(user='root', database='db_example')
+    cnx = mysql.connector.connect(user='root')
     cnx.cursor().execute("drop database if exists db_example")
     cnx.close()
     assert create_db('db_example') == 1
