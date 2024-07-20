@@ -1,5 +1,3 @@
-import mysql.connector
-
 #OPERACIONES CRUD
 
 def create(cursor, tabla, values):
@@ -91,23 +89,14 @@ def ver_stock(cursor):
 def ver_personas(cursor):
     return read(cursor, "*", "persona", "")
 
+#ACTUALIZAR UNA PERSONA
 def actualizar_persona(cursor, parametro, modificacion, dni):
     update(cursor, "persona", parametro, modificacion, "dni", dni)
     return 
 
+#ACTUALIZAR UN PRODUCTO
 def actualizar_producto(cursor, parametro, modificacion, IDProducto):
     update(cursor, "producto", parametro, modificacion, "IDProducto", IDProducto)
- 
-
-"""def actualizar_pedido(cursor):
-    update(cursor, tabla, parametro, modificacion, parametro_condicion, valor_condicion)
-    return """
-
-
-        #FALTA:
-        # Update pedidos
-
-
 
 
 #CONEXIÓN A BASE DE DATOS

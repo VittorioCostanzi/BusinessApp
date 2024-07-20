@@ -14,7 +14,7 @@ class Interfaz:
     def __init__(self, root):
 
         root.title("Database")
-        root.geometry("900x500+100+100")
+        root.geometry("900x460+100+100")
         
         self.persona_var = IntVar()
         self.dni_var = IntVar()
@@ -54,27 +54,21 @@ class Interfaz:
         #Done Done
         Button9 = ttk.Button(root, text="Ver Personas", command=self.ver_personas, width=20)
         Button9.place(x=equis, y=300)
-        
-        #Done 
+        #Done Done
         Button10 = ttk.Button(root, text="Actualizar Persona", command=self.actualizar_persona, width=20)
         Button10.place(x=equis, y=330)
-        
-        #UNDONE
+        #Done Done
         Button11 = ttk.Button(root, text="Actualizar Producto", command=self.actualizar_producto, width=20)
         Button11.place(x=equis, y=360)
-        
-        #UNDONE
-        Button12 = ttk.Button(root, text="Actualizar Pedido", command="", width=20)
-        Button12.place(x=equis, y=390)
-        
+                
         #Done Done
         Button13 = ttk.Button(root, text="Salir", command=self.salir, width=20)
-        Button13.place(x=equis, y=440)
+        Button13.place(x=equis, y=410)
        
         x_treeview=200
         y_treeview=60
         width_treeview=650
-        height_treeview= 355
+        height_treeview= 325
     
         self.l = ttk.Treeview(root)
         self.l.place(x=x_treeview, y=y_treeview, width=width_treeview, height=height_treeview)  # Posicionar el Treeview
@@ -127,8 +121,6 @@ class Interfaz:
                 modelo['values'] =read(cursor, "modelo", "producto", f"where marca = '{marca.get()}'")
         
         marca.bind("<<ComboboxSelected>>", parametros_combobox)
-        
-        #DEJASTE ACAA!!!!
         
         ttk.Label(ventana9, text="Parametro a modificar").place(x=260, y=20)
         parametro = ttk.Combobox(ventana9, state="readonly", values=('Tipo','Marca','Modelo','Descripcion', 'Precio', 'Stock'))
