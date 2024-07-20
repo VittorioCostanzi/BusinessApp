@@ -85,7 +85,6 @@ class Interfaz:
     
     def actualizar_producto(self):
         self.variable_var = StringVar()
-
         
         ventana9 = Toplevel()
         ventana9.title("Actualizar Producto")
@@ -132,9 +131,14 @@ class Interfaz:
         #DEJASTE ACAA!!!!
         
         ttk.Label(ventana9, text="Parametro a modificar").place(x=260, y=20)
-        parametro = ttk.Combobox(ventana9, state="readonly", values=("Nombre y Apellido", "Telefono", "Direccion", "Correo"))
+        parametro = ttk.Combobox(ventana9, state="readonly", values=('Tipo','Marca','Modelo','Descripcion', 'Precio', 'Stock'))
         parametro.place(x=390, y=20) 
-    
+                
+        def parametros_combobox2(event=None):
+            if parametro.get() == 'Stock':
+                self.show_text_bpedido.set("El stock se suma o se resta, use '-' para disminuir el stock")
+        parametro.bind("<<ComboboxSelected>>", parametros_combobox2)
+
         ttk.Label(ventana9, text="Nuevo valor").place(x=570, y=20)
         self.buscar_persona_entry = ttk.Entry(ventana9, justify=LEFT, width=20, textvariable=self.variable_var).place(x=643, y=20)
         def str_int():
@@ -145,26 +149,43 @@ class Interfaz:
             return valor
         def funcion():
             self.l_ventana9.delete(*self.l_ventana9.get_children())  # Limpiar cualquier dato anterior en el Treeview
-            if parametro.get() == "Nombre y Apellido":
-                parametro_modificado = "nombre_apellido"
-            elif parametro.get() == "Telefono":
-                parametro_modificado = "telefono"
-            elif parametro.get() == "Direccion":
-                parametro_modificado = "direccion"
-            elif parametro.get() == "Correo":
-                parametro_modificado = "correo"
-                
-            if type(str_int()) == str:
-                actualizar_persona(cursor, parametro_modificado, f"'{str_int()}'", self.dni_var.get())
+            if parametro.get() == "Tipo":
+                parametro_modificado = "tipo"
+            elif parametro.get() == "Marca":
+                parametro_modificado = "marca"
+            elif parametro.get() == "Modelo":
+                parametro_modificado = "modelo"
+            elif parametro.get() == "Descripcion":
+                parametro_modificado = "descripcion"
+            elif parametro.get() == "Precio":
+                parametro_modificado = "precio"
+            elif parametro.get() == "Stock":
+                parametro_modificado = "stock"
+            
+            if parametro_modificado == "stock":
+                if (int(read(cursor, 'stock', 'Producto', f'where (marca = "{marca.get()}") and (modelo = "{modelo.get()}")')[0][0]) + str_int()) > 0 :          
+                    actualizacion = int(read(cursor, 'stock', 'Producto', f'where (marca = "{marca.get()}") and (modelo = "{modelo.get()}")')[0][0]) + str_int()
+                    actualizar_producto(cursor, parametro_modificado, actualizacion, read(cursor, 'IDProducto', 'Producto', f'where (marca = "{marca.get()}") and (modelo = "{modelo.get()}")')[0][0])
+                else: 
+                    return self.show_text_bpedido.set("Stock insuficiente")
+            elif type(str_int()) == str:
+                actualizar_producto(cursor, parametro_modificado, f"'{str_int()}'", read(cursor, 'IDProducto', 'Producto', f'where (marca = "{marca.get()}") and (modelo = "{modelo.get()}")')[0][0])
             else:
-                actualizar_persona(cursor, parametro_modificado, str_int(), self.dni_var.get())
-            persona = buscar_persona(cursor, self.dni_var.get())
-            if len(persona) != 0:
+                 actualizar_producto(cursor, parametro_modificado, str_int(), read(cursor, 'IDProducto', 'Producto', f'where (marca = "{marca.get()}") and (modelo = "{modelo.get()}")')[0][0])
+            if parametro_modificado == 'marca':
+                producto = buscar_producto(cursor, str_int(), modelo.get())
+            elif parametro_modificado == 'modelo':
+                producto = buscar_producto(cursor, marca.get(), str_int())
+            else: 
+                producto = buscar_producto(cursor, marca.get(), modelo.get())
+            if len(producto) != 0:
                 self.show_text_bpedido.set("")
-                for item in persona:
+                for item in producto:
                     self.l_ventana9.insert("",END,values=item)
             else:
-                self.show_text_bpedido.set("DNI No registrado")       
+                self.show_text_bpedido.set("No se encontró el producto")   
+            marca['values'] =read(cursor, "marca", "producto", "group by marca")    
+            modelo['values'] = ""
 
         boton_eliminar_pedido = ttk.Button(
             ventana9,

@@ -283,7 +283,7 @@ def test_busco_pedido_con_pedido_verificacion():
     pyautogui.click()  
     
 def test_salir():
-    pyautogui.moveTo(151 + diff_x, 441 + diff_y, duration=.25)
+    pyautogui.moveTo(151 + diff_x, 541 + diff_y, duration=.25)
     pyautogui.click() 
     
     
