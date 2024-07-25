@@ -16,8 +16,8 @@ class Interfaz:
         root.title("Database")
         root.geometry("900x460+100+100")
         
-        self.persona_var = IntVar()
-        self.dni_var = IntVar()
+        self.persona_var = StringVar()
+        self.dni_var = StringVar()
         self.show_text_bpedido = StringVar()
         
         ttk.Label(root, text="Elija una opcion").place(x=70, y=30)
@@ -27,41 +27,41 @@ class Interfaz:
         # Update pedidos
         # Update productos
         
-        #Done Done
+        #Done Done Done
         Button1 = ttk.Button(root, text="Registrar Persona", command=self.registro_persona, width=20)
         Button1.place(x=equis, y=60)
-        #Done Done
+        #Done Done Done
         Button2 = ttk.Button(root, text="Registrar Producto", command=self.registro_producto, width=20)
         Button2.place(x=equis, y=90)
-        #Done Done
+        #Done Done Done
         Button3 = ttk.Button(root, text="Buscar Persona", command=self.busco_persona, width=20)
         Button3.place(x=equis, y=120)
-        #Done Done
+        #Done Done Done
         Button4 = ttk.Button(root, text="Buscar Producto", command=self.busco_producto, width=20)
         Button4.place(x=equis, y=150)
-        #Done Done
+        #Done Done Done
         Button5 = ttk.Button(root, text="Generar Pedido", command=self.generar_pedido, width=20)
         Button5.place(x=equis, y=180)
-        #Done Done
+        #Done Done Done
         Button6 = ttk.Button(root, text="Consultar Pedido", command=lambda:self.busco_pedido(0), width=20)
         Button6.place(x=equis, y=210)
-        #Done Done
+        #Done Done Done
         Button7 = ttk.Button(root, text="Eliminar Pedido", command=lambda:self.busco_pedido(1), width=20)
         Button7.place(x=equis, y=240)
-        #Done Done
+        #Done Done Done
         Button8 = ttk.Button(root, text="Ver Stock", command=self.stock, width=20)
         Button8.place(x=equis, y=270)
-        #Done Done
+        #Done Done Done
         Button9 = ttk.Button(root, text="Ver Personas", command=self.ver_personas, width=20)
         Button9.place(x=equis, y=300)
-        #Done Done
+        #Done Done Done
         Button10 = ttk.Button(root, text="Actualizar Persona", command=self.actualizar_persona, width=20)
         Button10.place(x=equis, y=330)
-        #Done Done
+        #Done Done Done
         Button11 = ttk.Button(root, text="Actualizar Producto", command=self.actualizar_producto, width=20)
         Button11.place(x=equis, y=360)
                 
-        #Done Done
+        #Done Done Done
         Button13 = ttk.Button(root, text="Salir", command=self.salir, width=20)
         Button13.place(x=equis, y=410)
        
@@ -135,12 +135,13 @@ class Interfaz:
         self.buscar_persona_entry = ttk.Entry(ventana9, justify=LEFT, width=20, textvariable=self.variable_var).place(x=643, y=20)
         def str_int():
             try:
-                valor = int(self.variable_var.get())
+                valor = float(self.variable_var.get())
             except:
                 valor = str(self.variable_var.get())
             return valor
         def funcion():
             self.l_ventana9.delete(*self.l_ventana9.get_children())  # Limpiar cualquier dato anterior en el Treeview
+            
             if parametro.get() == "Tipo":
                 parametro_modificado = "tipo"
             elif parametro.get() == "Marca":
@@ -153,6 +154,18 @@ class Interfaz:
                 parametro_modificado = "precio"
             elif parametro.get() == "Stock":
                 parametro_modificado = "stock"
+            if parametro_modificado == "stock":
+                try:
+                    int(self.variable_var.get())
+                except:
+                    self.show_text_bpedido.set("Ingrese un valor valido")
+                    return 
+            if ((parametro_modificado == "tipo") or (parametro_modificado == "marca") or (parametro_modificado =="modelo") or (parametro_modificado =="descripcion")) and ((type(str_int()) == float) or (str_int() == "")):
+                self.show_text_bpedido.set("Ingrese un valor valido")
+                return 
+            elif ((parametro_modificado == "precio") or (parametro_modificado == "stock")) and ((type(str_int()) == str) or (str_int() <= 0)):
+                self.show_text_bpedido.set("Ingrese un valor valido")
+                return 
             
             if parametro_modificado == "stock":
                 if (int(read(cursor, 'stock', 'Producto', f'where (marca = "{marca.get()}") and (modelo = "{modelo.get()}")')[0][0]) + str_int()) > 0 :          
@@ -239,6 +252,17 @@ class Interfaz:
                 valor = str(self.variable_var.get())
             return valor
         def funcion():
+            try: 
+                int(self.dni_var.get())
+                if int(self.dni_var.get()) <= 0:
+                    self.show_text_bpedido.set("Ingrese un DNI valido")
+                    return 
+                if len(buscar_persona(cursor, self.dni_var.get())) == 0:
+                    self.show_text_bpedido.set("DNI no registrado")
+                    return 
+            except:
+                self.show_text_bpedido.set("Ingrese un DNI valido")
+                return 
             self.l_ventana8.delete(*self.l_ventana8.get_children())  # Limpiar cualquier dato anterior en el Treeview
             if parametro.get() == "Nombre y Apellido":
                 parametro_modificado = "nombre_apellido"
@@ -248,7 +272,14 @@ class Interfaz:
                 parametro_modificado = "direccion"
             elif parametro.get() == "Correo":
                 parametro_modificado = "correo"
-                
+            
+            if ((parametro_modificado == "nombre_apellido") or (parametro_modificado == "direccion") or (parametro_modificado =="correo")) and ((type(str_int()) == int) or (str_int() == "")):
+                self.show_text_bpedido.set("Ingrese un valor valido")
+                return 
+            elif (parametro_modificado == "telefono") and ((type(str_int()) == str) or (str_int() <= 0) or (str_int() >= 9999999999)):
+                self.show_text_bpedido.set("Ingrese un valor valido")
+                return 
+            
             if type(str_int()) == str:
                 actualizar_persona(cursor, parametro_modificado, f"'{str_int()}'", self.dni_var.get())
             else:
@@ -284,8 +315,9 @@ class Interfaz:
         ventana7.focus()
         ventana7.grab_set()
         
-        self.cantidad_var = IntVar()
-        self.dni_genped_var = IntVar()
+        self.cantidad_var = StringVar()
+        self.dni_genped_var = StringVar()
+        self.show_text = StringVar()
         
         ttk.Label(ventana7, text="DNI ").place(x=20, y=20) 
         self.dni_generar = ttk.Entry(ventana7, justify=LEFT, width=20, textvariable=self.dni_genped_var).place(x=60, y=20)  
@@ -298,6 +330,10 @@ class Interfaz:
         ttk.Label(ventana7, text="Marca ").place(x=400, y=20)
         marca = ttk.Combobox(ventana7, state="readonly", values=['']+read(cursor, "marca", "producto", "group by marca"))
         marca.place(x=450, y=20)  
+        
+        texto = ttk.Label(ventana7, textvariable=self.show_text)
+        texto.place(x=600, y=20)
+        texto.config(foreground='red')
         
         def insertar_tipo(event=None):
             self.l_ventana71.delete(*self.l_ventana71.get_children())
@@ -331,7 +367,15 @@ class Interfaz:
         marca.bind("<<ComboboxSelected>>", insertar_marca)
         
         def seleccion():
-            
+            try: 
+                int(self.cantidad_var.get())
+                if int(self.cantidad_var.get()) <= 0:
+                    self.show_text.set("Ingrese una cantidad mayor a 0")
+                    return 
+            except:
+                self.show_text.set("Ingrese un numero")
+                return 
+            self.show_text.set("")
             item_all = self.l_ventana71.selection()
             lista = [i for i in (self.l_ventana71.item(item_all[0], "values"))]
             lista[6]=self.cantidad_var.get()
@@ -384,14 +428,30 @@ class Interfaz:
             self.l_ventana72.heading(colum, text=colum)
         
         def seleccion2():
+            try: 
+                int(self.dni_genped_var.get())
+                if int(self.dni_genped_var.get()) <= 0:
+                    self.show_text.set("Ingrese un DNI valido")
+                    return 
+                if len(buscar_persona(cursor, self.dni_genped_var.get())) == 0:
+                    self.show_text.set("DNI no registrado")
+                    return 
+            except:
+                self.show_text.set("Ingrese un DNI valido")
+                return 
+            
             items = self.l_ventana72.get_children()
+            if len(items) == 0:
+                self.show_text.set("Agregue productos al pedido")
+                return
+            self.show_text.set("")
             all_values = []
             for item in items:
                 item_values = self.l_ventana72.item(item, "values")
                 all_values.append(item_values)
-            print(all_values)
             solicitar_pedido(cursor, self.dni_genped_var.get(), [(i[0], int(i[6])) for i in all_values])
-            print(consultar_pedido(cursor, 32132647))
+            self.l_ventana72.delete(*self.l_ventana72.get_children())
+            ventana7.destroy()
         
         boton_borrar_pedido = ttk.Button(
             ventana7,
@@ -403,14 +463,14 @@ class Interfaz:
         boton_generar_pedido = ttk.Button(
             ventana7,
             text="Generar Pedido", 
-            command= lambda:(seleccion2(), self.l_ventana72.delete(*self.l_ventana72.get_children()), ventana7.destroy())
+            command=seleccion2
         )
         boton_generar_pedido.place(x=595, y=375)
         
         boton_cerrar_pedido = ttk.Button(
             ventana7,
             text="Cerrar", 
-            command=ventana7.destroy
+            command=lambda:(self.l_ventana72.delete(*self.l_ventana72.get_children()),ventana7.destroy())
         )
         boton_cerrar_pedido.place(x=695, y=375)
         
@@ -420,7 +480,7 @@ class Interfaz:
         self.IDPedido_var = IntVar()
         
         ventana5 = Toplevel()
-        ventana5.title("Editar Pedido")
+        ventana5.title("Consultar Pedido")
         ventana5.geometry("800x210+150+150")
         ventana5.focus()
         ventana5.grab_set()
@@ -451,7 +511,17 @@ class Interfaz:
             texto.place(x=300, y=20)
         def funcion():
             self.l_ventana5.delete(*self.l_ventana5.get_children())  # Limpiar cualquier dato anterior en el Treeview
-            pedido = consultar_pedido(cursor, self.dni_var.get())
+            try: 
+                variable_dni = int(self.dni_var.get())
+                if variable_dni == 0:
+                    
+                    self.show_text_bpedido.set("Ingrese un dni valido, sin puntos")
+                    return 
+            except:
+                print(1)
+                self.show_text_bpedido.set("Ingrese un dni valido, sin puntos")
+                return 
+            pedido = consultar_pedido(cursor, variable_dni)
             if pedido != 0:
                 self.show_text_bpedido.set("")
                 for item in pedido:
@@ -460,6 +530,19 @@ class Interfaz:
                 self.show_text_bpedido.set("No tiene pedidos")
             
         def eliminar():
+            try: 
+                variable_dni = int(self.dni_var.get())
+                if variable_dni == 0:
+                    
+                    self.show_text_bpedido.set("Ingrese un dni valido, sin puntos")
+                    return 
+            except:
+                print(1)
+                self.show_text_bpedido.set("Ingrese un dni valido, sin puntos")
+                return 
+            if len(read(cursor, "*", "pedido",f"where IDPedido = {self.IDPedido_var.get()} and dni = {self.dni_var.get()}")) == 0:
+                self.show_text_bpedido.set("El DNI ingresado no posee ese pedido")
+                return 
             self.l_ventana5.delete(*self.l_ventana5.get_children())  # Limpiar cualquier dato anterior en el Treeview
             eliminado = eliminar_pedido(cursor, self.dni_var.get(), self.IDPedido_var.get())
             if eliminado != 0:
@@ -482,7 +565,7 @@ class Interfaz:
         )
         boton_cerrar_pedido.place(x=375, y=170)
         if eso == 1:
-            texto.place(x=600, y=20)
+            texto.place(x=590, y=20)
             ttk.Label(ventana5, text="ID Pedido").place(x=300, y=20)
             self.buscar_persona_entry = ttk.Entry(ventana5, justify=LEFT, width=20, textvariable=self.IDPedido_var).place(x=380, y=20)
             boton_eliminar_pedido = ttk.Button(
@@ -495,7 +578,7 @@ class Interfaz:
     def busco_persona(self):
         #self.persona_var = IntVar()
         self.show_text_bpersona = StringVar()
-        
+        self.show_text_bpersona.set("")
         ventana3 = Toplevel()
         ventana3.title("Buscar Persona")
         ventana3.geometry("800x150+150+150")
@@ -534,7 +617,16 @@ class Interfaz:
         texto.place(x=310, y=20)
         def funcion():
             self.l_ventana3.delete(*self.l_ventana3.get_children())  # Limpiar cualquier dato anterior en el Treeview
-            persona = buscar_persona(cursor, self.persona_var.get())
+
+            try: 
+                variable_dni = int(self.persona_var.get())
+                if variable_dni == 0:
+                    self.show_text_bpersona.set("Debe ingresar un dni valido, sin puntos")
+            except:
+                    self.show_text_bpersona.set("Debe ingresar un dni valido, sin puntos")
+                    return 
+                    
+            persona = buscar_persona(cursor, variable_dni)
             if len(persona)==1:
                 self.show_text_bpersona.set("")
             else:
@@ -556,7 +648,6 @@ class Interfaz:
         )
         boton_cerrar_persona.place(x=375, y=120)
 
-    
     def busco_producto(self):
         self.producto_var_marca = StringVar()
         self.producto_var_modelo = StringVar()
@@ -592,6 +683,7 @@ class Interfaz:
             self.l_ventana4.column(colum, width=width, anchor='center')
             self.l_ventana4.heading(colum, text=colum)
         
+        #Agregar tipo
         ttk.Label(ventana4, text="Marca: ").place(x=20, y=20)
         self.buscar_producto_entry = ttk.Entry(ventana4, justify=LEFT, width=20, textvariable=self.producto_var_marca).place(x=100, y=20)
         ttk.Label(ventana4, text="Modelo: ").place(x=20, y=50)
@@ -601,7 +693,7 @@ class Interfaz:
         texto.place(x=310, y=20)
         def funcion():
             self.l_ventana4.delete(*self.l_ventana4.get_children())  # Limpiar cualquier dato anterior en el Treeview
-            producto = buscar_producto(cursor, self.producto_var_marca.get(), self.producto_var_modelo.get())
+            producto = buscar_producto(cursor, self.producto_var_marca.get().capitalize(), self.producto_var_modelo.get().capitalize())
             if len(producto) == 1:
                 self.show_text.set("")
             else:
@@ -623,11 +715,12 @@ class Interfaz:
         boton_cerrar_persona.place(x=375, y=230)
         
     def registro_persona(self):
-        self.dni_var = IntVar()
+        self.dni_var = StringVar()
         self.nombre_apellido_var = StringVar()
-        self.telefono_var = IntVar()
+        self.telefono_var = StringVar()
         self.direccion_var = StringVar()
         self.correo_var = StringVar()
+        self.error_text = StringVar()
         
         # Crear una ventana secundaria.
         ventana6 = Toplevel()
@@ -637,26 +730,62 @@ class Interfaz:
         ventana6.grab_set()
         
         
-        ttk.Label(ventana6, text="DNI: ").place(x=20, y=20)
+        ttk.Label(ventana6, text="DNI ").place(x=20, y=20)
         self.entry_tipo = ttk.Entry(ventana6, justify=LEFT, width=20, textvariable=self.dni_var).place(x=130, y=20)
-        ttk.Label(ventana6, text="Nombre y Apellido: ").place(x=20, y=50)
+        ttk.Label(ventana6, text="Nombre y Apellido ").place(x=20, y=50)
         self.entry_marca = ttk.Entry(ventana6, justify=LEFT, width=20, textvariable=self.nombre_apellido_var).place(x=130, y=50)
-        ttk.Label(ventana6, text="Telefono: ").place(x=20, y=80)
+        ttk.Label(ventana6, text="Telefono ").place(x=20, y=80)
         self.entry_modelo = ttk.Entry(ventana6, justify=LEFT, width=20, textvariable=self.telefono_var).place(x=130, y=80)
-        ttk.Label(ventana6, text="Direccion: ").place(x=20, y=110)
+        ttk.Label(ventana6, text="Direccion ").place(x=20, y=110)
         self.entry_descripcion = ttk.Entry(ventana6, justify=LEFT, width=20, textvariable=self.direccion_var).place(x=130, y=110)
-        ttk.Label(ventana6, text="Correo: ").place(x=20, y=140)
+        ttk.Label(ventana6, text="Correo ").place(x=20, y=140)
         self.entry_precio = ttk.Entry(ventana6, justify=LEFT, width=20, textvariable=self.correo_var).place(x=130, y=140)
-     
+        texto_error = ttk.Label(ventana6, textvariable=self.error_text)
+        texto_error.config(foreground = 'red')
+        texto_error.place(x=20, y=180)
+        
         def registrar():
-            #registrar_producto(cursor, tipo, marca, modelo, descripcion, precio, stock)
-            registrar_persona(cursor,self.dni_var.get(), self.nombre_apellido_var.get(), self.telefono_var.get(), self.direccion_var.get(), self.correo_var.get())
+            
+            try:
+                int(self.dni_var.get())
+            except:
+                self.error_text.set("Ingrese numeros en el campo DNI")
+                return
+            try:
+                if self.telefono_var.get() != "":
+                    int(self.telefono_var.get())
+            except:
+                self.error_text.set("Ingrese numeros en el campo telefono")
+                return
+            if (int(self.dni_var.get()) <= 0):
+                self.error_text.set("Ingrese un numero valido para el dni")
+                return
+            if len(buscar_persona(cursor, int(self.dni_var.get()))) > 0:
+                self.error_text.set("DNI ya registrado")
+                return
+            if ((self.telefono_var.get() !="") and (int(self.telefono_var.get()) < 0)) or (int(self.telefono_var.get())>9999999999):
+                self.error_text.set("Ingrese un numero valido para el telefono")
+                return
+            if (self.dni_var.get() == ""):
+                self.error_text.set("Debe rellenar el campo DNI")
+                return
+            elif (self.nombre_apellido_var.get() == ""):
+                self.error_text.set("Debe rellenar el campo Nombre y Apellido")
+                return
+            elif (self.direccion_var.get() == ""):
+                self.error_text.set("Debe rellenar el campo Direccion")
+                return
+            if self.telefono_var.get() == "":
+                self.telefono_var.set("0")
+            print(self.dni_var.get(), self.nombre_apellido_var.get(), self.direccion_var.get())
+            print(registrar_persona(cursor,self.dni_var.get(), self.nombre_apellido_var.get(), self.telefono_var.get(), self.direccion_var.get(), self.correo_var.get()))
+            self.dni_var.set(0), self.nombre_apellido_var.set(""), self.telefono_var.set(0), self.direccion_var.set(""), self.correo_var.set("")
             ventana6.destroy()
             
         boton_registrar = ttk.Button(
             ventana6,
             text="Registrar", 
-            command=lambda:(registrar(), self.dni_var.set(0), self.nombre_apellido_var.set(""), self.telefono_var.set(0), self.direccion_var.set(""), self.correo_var.set(""))
+            command=registrar
         )
         boton_registrar.place(x=65, y=220)
         boton_cerrar = ttk.Button(
@@ -673,6 +802,7 @@ class Interfaz:
         self.descripcio_var = StringVar()
         self.precio_var = DoubleVar()
         self.stock_var = IntVar()
+        self.error_text = StringVar()
         
         # Crear una ventana secundaria.
         ventana_secundaria = Toplevel()
@@ -681,28 +811,51 @@ class Interfaz:
         ventana_secundaria.focus()
         ventana_secundaria.grab_set()
         
-        ttk.Label(ventana_secundaria, text="Tipo: ").place(x=20, y=20)
+        ttk.Label(ventana_secundaria, text="Tipo ").place(x=20, y=20)
         self.entry_tipo = ttk.Entry(ventana_secundaria, justify=LEFT, width=20, textvariable=self.tipo_var).place(x=100, y=20)
-        ttk.Label(ventana_secundaria, text="Marca: ").place(x=20, y=50)
+        ttk.Label(ventana_secundaria, text="Marca ").place(x=20, y=50)
         self.entry_marca = ttk.Entry(ventana_secundaria, justify=LEFT, width=20, textvariable=self.marca_var).place(x=100, y=50)
-        ttk.Label(ventana_secundaria, text="Modelo: ").place(x=20, y=80)
+        ttk.Label(ventana_secundaria, text="Modelo ").place(x=20, y=80)
         self.entry_modelo = ttk.Entry(ventana_secundaria, justify=LEFT, width=20, textvariable=self.modelo_var).place(x=100, y=80)
-        ttk.Label(ventana_secundaria, text="Descripcion: ").place(x=20, y=110)
+        ttk.Label(ventana_secundaria, text="Descripcion ").place(x=20, y=110)
         self.entry_descripcion = ttk.Entry(ventana_secundaria, justify=LEFT, width=20, textvariable=self.descripcio_var).place(x=100, y=110)
-        ttk.Label(ventana_secundaria, text="Precio: ").place(x=20, y=140)
+        ttk.Label(ventana_secundaria, text="Precio ").place(x=20, y=140)
         self.entry_precio = ttk.Entry(ventana_secundaria, justify=LEFT, width=20, textvariable=self.precio_var).place(x=100, y=140)
-        ttk.Label(ventana_secundaria, text="Stock: ").place(x=20, y=170)
+        ttk.Label(ventana_secundaria, text="Stock ").place(x=20, y=170)
         self.entry_stock = ttk.Entry(ventana_secundaria, justify=LEFT, width=20, textvariable=self.stock_var).place(x=100, y=170)
         
+        texto_rojo = ttk.Label(ventana_secundaria, textvariable=self.error_text)
+        texto_rojo.config(foreground='red')
+        texto_rojo.place(x=20, y=195)
+        
+            
         def registrar():
-            #registrar_producto(cursor, tipo, marca, modelo, descripcion, precio, stock)
-            registrar_producto(cursor,self.tipo_var.get(), self.marca_var.get(), self.modelo_var.get(), self.descripcio_var.get(), self.precio_var.get(), self.stock_var.get())
+            
+            registro = registrar_producto(cursor,self.tipo_var.get().capitalize(), self.marca_var.get().capitalize(), self.modelo_var.get().capitalize(), self.descripcio_var.get().capitalize(), self.precio_var.get(), self.stock_var.get())
+            print(registro)
+            if registro == 0:
+                return self.error_text.set("Producto ya registrado")
+            elif registro == 1:
+                return self.error_text.set("Debe rellenar el campo 'Tipo'")
+            elif registro == 2:
+                return self.error_text.set("Debe rellenar el campo 'Marca'")
+            elif registro == 3:
+                return self.error_text.set("Debe rellenar el campo 'Modelo'")
+            elif registro == 4:
+                return self.error_text.set("El precio debe ser un numero positivo de formato ***.**")
+            elif registro == 5:
+                return self.error_text.set("El stock debe ser un numero entero positivo")
+            else: 
+                self.error_text.set("")
+                pass
+            #registrar_producto(cursor,self.tipo_var.get(), self.marca_var.get(), self.modelo_var.get(), self.descripcio_var.get(), self.precio_var.get(), self.stock_var.get())
+ 
             ventana_secundaria.destroy()
             
         boton_registrar = ttk.Button(
             ventana_secundaria,
             text="Registrar", 
-            command=registrar
+            command=lambda:(registrar())
         )
         boton_registrar.place(x=65, y=220)
         boton_cerrar = ttk.Button(

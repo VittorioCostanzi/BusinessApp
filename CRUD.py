@@ -1,8 +1,12 @@
+#import mysql.connector
 #OPERACIONES CRUD
 
 def create(cursor, tabla, values):
   
-    cursor.execute(f"insert into {tabla} values ({values})")
+    try:
+        cursor.execute(f"insert into {tabla} values ({values})")
+    except:
+        return 0
 
 def read(cursor, parametros, tabla, where):
   
@@ -23,12 +27,30 @@ def update(cursor, tabla, parametro, modificacion, parametro_condicion, valor_co
 #REGISTRAR UN NUEVO PRODUCTO
 
 def registrar_producto(cursor, tipo, marca, modelo, descripcion, precio, stock):
-    create(cursor, "producto(tipo, marca, modelo, descripcion, precio, stock)", f"'{tipo}', '{marca}', '{modelo}', '{descripcion}', {precio}, {stock}")
+    if len(buscar_producto(cursor, marca, modelo)) != 0:
+        return 0
+    elif (len(tipo) == 0):
+        return 1
+    elif (len(marca) == 0):
+        return 2
+    elif (len(modelo) == 0):
+        return 3
+    elif (type(precio) != (float or int) or (precio <0)):
+        return 4
+    elif(type(stock) != int or stock < 0):
+        return 5
+    else:
+        create(cursor, "producto(tipo, marca, modelo, descripcion, precio, stock)", f"'{tipo}', '{marca}', '{modelo}', '{descripcion}', {precio}, {stock}")
     
 #REGISTRAR UNA NUEVA PERSONA
 
 def registrar_persona(cursor, dni, nombre_apellido, telefono, direccion, correo):
-    create(cursor, "persona(dni, nombre_apellido, telefono, direccion, correo)", f"{dni}, '{nombre_apellido}', {telefono}, '{direccion}', '{correo}'")
+    if len(buscar_persona(cursor, dni)) != 0:
+        return 0
+    elif (dni == 0) or (len(nombre_apellido) == 0) or (len(direccion) == 0):
+        return 1
+    else:
+        create(cursor, "persona(dni, nombre_apellido, telefono, direccion, correo)", f"{dni}, '{nombre_apellido}', {telefono}, '{direccion}', '{correo}'")
 
 #VERIFICAR SI UNA PERSONA SE ENCUENTRA REGISTRADA
 

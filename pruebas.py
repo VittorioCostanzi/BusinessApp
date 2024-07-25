@@ -1,9 +1,18 @@
-def str_int(variable_var):
-    try:
-        valor = int(variable_var)
-    except:
-        valor = str(variable_var)
-    return valor
+import mysql.connector
+from CRUD import read
 
-print(type(str_int("holis")), str_int("holis"))
-print(type(str_int("64")), str_int("64"))
+def buscar_persona(cursor, dni):
+    if type(dni) != int:
+        return 0
+    else:
+        return read(cursor, "*", "persona", f"where dni = {dni}")
+
+
+cnx = mysql.connector.connect(user='root', database='db_example') #root es el usuario por defecto
+cursor = cnx.cursor()
+
+print(buscar_persona(cursor, "Eso"))
+
+cursor.close()
+cnx.close()
+

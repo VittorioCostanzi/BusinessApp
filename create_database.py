@@ -34,7 +34,7 @@ def create_db(db_name):
                         marca varchar(50) not null,
                         modelo varchar(50) not null,
                         descripcion text,
-                        precio decimal(6,2),
+                        precio decimal(6,2) unsigned,
                         stock int unsigned not null,
                         primary key(IDProducto)
                     );"""

@@ -34,7 +34,8 @@ class TestDatabase_operations:
 
         
     @pytest.mark.parametrize("test_input1, test_input2, expected",
-                            [("persona(dni, nombre_apellido, telefono, direccion, correo)", "320124230 ,'Mario Luis', 12332423, 'algo 123', 'algo@algo.com'", None)])
+                            [("persona(dni, nombre_apellido, telefono, direccion, correo)", "320124230 ,'Mario Luis', 12332423, 'algo 123', 'algo@algo.com'", None),
+                             ("non_exist(eso)", "pescado",0)])
     def test_create(self, test_input1, test_input2, expected):
         assert create(self.cursor, test_input1, test_input2) == expected
         
