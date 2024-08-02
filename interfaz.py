@@ -4,9 +4,11 @@ import mysql.connector
 from CRUD import *
 from create_database import create_db
 
-create_db('db_example')
+bbdd = "base_de_datos"
 
-cnx = mysql.connector.connect(user='root', database='db_example') #root es el usuario por defecto
+create_db(bbdd)
+
+cnx = mysql.connector.connect(user='root', database=bbdd) #root es el usuario por defecto
 cursor = cnx.cursor()
 
 class Interfaz:
