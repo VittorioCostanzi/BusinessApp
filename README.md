@@ -25,7 +25,12 @@ git clone https://github.com/VittorioCostanzi/BusinessApp.git
 En caso de querer probar la aplicación se puede utilizar una base de datos de ejemplo proporcionada en el codigo. <br>
 En el siguiente fragmento del script interfaz.py deberá utilizar la base de datos 'db_example'<br>
 ```
-bbdd = "db_example"
+bbdd = "base_de_datos"
+
+create_db(bbdd)
+
+cnx = mysql.connector.connect(user='root', database=bbdd) #root es el usuario por defecto
+cursor = cnx.cursor()
 ```
 Para modificar los datos de acceso al servidor podra modificar el siguiente fragmento del script create_database.py con los datos del servidor a utilizar<br>
 ```
