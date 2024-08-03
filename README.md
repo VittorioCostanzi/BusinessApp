@@ -70,9 +70,9 @@ coverage report "test_main.py"
 ```
 ### Tests de la Interfaz Gráfica
 > [!CAUTION]
-> Cuando corra el test de la interfaz grafica, asegurese de tener instaladas todas las dependencias y la base de datos funcionando.
-> Utilice la base de datos 'db_example' para realizar el testeo de la interfaz gráfica.
-> Como verificación adicional, corra la aplicación previo al testeo y asegurese que funcione. De lo contrario podria tener problemas dado que la metodología utilizada para testear la interfaz gráfica controla el teclado y el mouse mientras se ejecuta el test.
+> - Cuando corra el test de la interfaz grafica, asegurese de tener instaladas todas las dependencias y la base de datos funcionando.<br>
+> - Utilice la base de datos 'db_example' para realizar el testeo de la interfaz gráfica.<br>
+> - Como verificación adicional, corra la aplicación previo al testeo y asegurese que funcione. De lo contrario podria tener problemas dado que la metodología utilizada para testear la interfaz gráfica controla el teclado y el mouse mientras se ejecuta el test.
 
 El funcionamiento de la interfaz gráfica se testeó utilizando la librería pyautogui. Estos tests aseguran que los componentes de la interfaz respondan correctamente a las acciones del usuario, por lo cual la verificación es visual. Para ejecutarlos, puede utilizar el siguiente comando en la consola, ubicado en el directorio del proyecto. 
 ```
