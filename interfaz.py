@@ -4,7 +4,7 @@ import mysql.connector
 from CRUD import *
 from create_database import create_db
 
-bbdd = "base_de_datos"
+bbdd = "db_example"
 
 create_db(bbdd)
 

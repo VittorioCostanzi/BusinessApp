@@ -8,13 +8,6 @@ import pyperclip
 
 entorno = Interfaz(root)
 
-        #FALTA:
-        # Eliminar personas
-        # Eliminar productos
-        # Update personas
-        # Update pedidos
-        # Update productos
-
 #Suple la diferencia entre la ubicacion real en la pantalla y la utilizada
 
 diff_x = root.winfo_rootx()-100
@@ -52,7 +45,7 @@ def test_busco_persona():
     teclear = [pyautogui.press(i) for i in '32132647']
     pyautogui.moveTo(400 + diff_x, 169 + diff_y, duration=.25)
     pyautogui.click() 
-    assert entorno.persona_var.get() == 32132647
+    assert entorno.persona_var.get() == '32132647'
     pyautogui.moveTo(525 + diff_x, 270 + diff_y, duration=.25)
     pyautogui.click() 
     
@@ -131,7 +124,7 @@ def test_busco_pedido_sin_pedido():
     teclear = [pyautogui.press(i) for i in '32132647']
     pyautogui.moveTo(370 + diff_x, 169 + diff_y, duration=.25) #Se mueve al boton buscar
     pyautogui.click() 
-    assert entorno.dni_var.get() == 32132647
+    assert entorno.dni_var.get() == '32132647'
     assert entorno.show_text_bpedido.get() == "No tiene pedidos"
     pyautogui.moveTo(526 + diff_x, 321 + diff_y, duration=.25) #Se mueve al boton cerrar
     pyautogui.click() 
@@ -153,8 +146,8 @@ def test_elimino_pedido_sin_pedido():
     teclear = [pyautogui.press(i) for i in '32']
     pyautogui.moveTo(671 + diff_x, 170 + diff_y, duration=.25) #Se mueve al boton eliminar
     pyautogui.click() 
-    assert entorno.dni_var.get() == 32132647
-    assert entorno.show_text_bpedido.get() == "Persona o pedido inexistente"
+    assert entorno.dni_var.get() == '32132647'
+    assert entorno.show_text_bpedido.get() == "El DNI ingresado no posee ese pedido"
     pyautogui.moveTo(526 + diff_x, 321 + diff_y, duration=.25) #Se mueve al boton cerrar
     pyautogui.click()     
     
@@ -269,7 +262,7 @@ def test_busco_pedido_con_pedido():
     teclear = [pyautogui.press(i) for i in '32541895']
     pyautogui.moveTo(370 + diff_x, 169 + diff_y, duration=.25)
     pyautogui.click() 
-    assert entorno.dni_var.get() == 32541895
+    assert entorno.dni_var.get() == '32541895'
     assert entorno.show_text_bpedido.get() == ""
     pyautogui.moveTo(525 + diff_x, 320 + diff_y, duration=.25)
     pyautogui.click() 
@@ -288,7 +281,7 @@ def test_elimino_pedido_con_pedido():
     teclear = [pyautogui.press(i) for i in '1']
     pyautogui.moveTo(671 + diff_x, 170 + diff_y, duration=.25) #Se mueve al boton eliminar
     pyautogui.click() 
-    assert entorno.dni_var.get() == 32541895
+    assert entorno.dni_var.get() == '32541895'
     assert entorno.show_text_bpedido.get() == "Eliminado"
     pyautogui.moveTo(526 + diff_x, 320 + diff_y, duration=.25)
     pyautogui.click() 
@@ -303,7 +296,7 @@ def test_busco_pedido_con_pedido_verificacion():
     teclear = [pyautogui.press(i) for i in '32541895']
     pyautogui.moveTo(370 + diff_x, 169 + diff_y, duration=.25)
     pyautogui.click() 
-    assert entorno.dni_var.get() == 32541895
+    assert entorno.dni_var.get() == '32541895'
     assert entorno.show_text_bpedido.get() == "No tiene pedidos"
     pyautogui.moveTo(525 + diff_x, 320 + diff_y, duration=.25)
     pyautogui.click()
